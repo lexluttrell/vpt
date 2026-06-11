@@ -43,14 +43,19 @@ body{padding-top:env(safe-area-inset-top) !important;padding-bottom:env(safe-are
 <div id="ep"><h2>&#9888; Error</h2><pre id="et"></pre></div>
 <script>
 window.onerror=function(m,s,l,c,e){
+  if(window.__fz)return;
   document.getElementById("loading").style.display="none";
   var p=document.getElementById("ep");
-  document.getElementById("et").textContent="Message: "+m+"\nLine: "+l+":"+c+(e&&e.stack?"\n\nStack:\n"+e.stack:"");
+  document.getElementById("et").textContent="Message: "+m+"\nLine: "+l+":"+c+(e&&e.stack?"\n\nStack:\n"+e.stack:"")+"\n\nDevice: "+navigator.userAgent+"\nScreen: "+window.innerWidth+"x"+window.innerHeight;
   p.style.display="block";p.onclick=function(){p.style.display="none";};
 };
 window.addEventListener("unhandledrejection",function(e){
   window.onerror("Rejection: "+(e.reason&&e.reason.message||e.reason),"",0,0,e.reason);
 });
+try{new Function("var a={};a?.b;a??1;async function _t(){};class _C{}");}catch(_e){
+  window.onerror("This device's software is too old to run the trainer.\n\nSafari needs iOS 13.4 or newer (latest iOS recommended).\nFix: Settings > General > Software Update.","",0,0,null);
+  window.__fz=1;
+}
 window.storage=window.storage||{
   get:async function(k){try{var v=localStorage.getItem(k);return v?{key:k,value:v}:null;}catch(e){return null;}},
   set:async function(k,v){try{localStorage.setItem(k,String(v));return{key:k,value:v};}catch(e){return null;}},
